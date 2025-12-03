@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          accepts_marketing: boolean | null
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accepts_marketing?: boolean | null
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accepts_marketing?: boolean | null
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      simulations: {
+        Row: {
+          agency_fees: number
+          created_at: string
+          credit_duration: number
+          financing_percent: number
+          id: string
+          interest_rate: number
+          monthly_rent: number
+          net_seller_price: number
+          notary_fees_percent: number
+          renovation_budget: number
+          target_profitability: number
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agency_fees?: number
+          created_at?: string
+          credit_duration?: number
+          financing_percent?: number
+          id?: string
+          interest_rate?: number
+          monthly_rent: number
+          net_seller_price: number
+          notary_fees_percent?: number
+          renovation_budget?: number
+          target_profitability?: number
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agency_fees?: number
+          created_at?: string
+          credit_duration?: number
+          financing_percent?: number
+          id?: string
+          interest_rate?: number
+          monthly_rent?: number
+          net_seller_price?: number
+          notary_fees_percent?: number
+          renovation_budget?: number
+          target_profitability?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
