@@ -137,35 +137,60 @@ export function ResultsPanel({ inputs, results }: ResultsPanelProps) {
           </h3>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <div className="stat-label mb-1">Prix net vendeur maximum recommandé</div>
-            <div className="text-3xl font-bold text-accent">
-              {formatCurrency(results.maxNetSellerPrice)}
-            </div>
-          </div>
-
-          <div className="p-4 bg-card rounded-lg">
-            <div className="stat-label mb-2">Coût total max du projet</div>
-            <div className="text-xl font-semibold text-foreground">
-              {formatCurrency(results.maxTotalCost)}
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Pour une rentabilité de {inputs.targetProfitability}%, votre prix net vendeur max 
-              recommandé est de {formatCurrency(results.maxNetSellerPrice)}.
-            </p>
-          </div>
-
-          {results.maxNetSellerPrice < inputs.netSellerPrice && (
-            <div className="p-3 bg-warning/10 rounded-lg border border-warning/20">
-              <p className="text-sm text-warning font-medium">
-                ⚠️ Le prix actuel ({formatCurrency(inputs.netSellerPrice)}) est supérieur 
-                au prix max recommandé. Négociez une baisse de{' '}
-                {formatCurrency(inputs.netSellerPrice - results.maxNetSellerPrice)}.
+        {/* Cas A: Rentabilité actuelle >= rentabilité cible */}
+        {isProfitable ? (
+          <div className="space-y-4">
+            <div className="p-4 bg-success/10 rounded-lg border border-success/20">
+              <p className="text-success font-semibold mb-2">
+                ✓ Au prix actuel, vous êtes déjà au-dessus de votre objectif de rentabilité.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Rentabilité actuelle : <span className="font-medium text-foreground">{results.currentProfitability.toFixed(2)}%</span> — Objectif : <span className="font-medium text-foreground">{inputs.targetProfitability}%</span>
               </p>
             </div>
-          )}
-        </div>
+
+            <div className="p-4 bg-muted/30 rounded-lg">
+              <p className="text-xs text-muted-foreground">
+                Théoriquement, pour une rentabilité de {inputs.targetProfitability}%, le prix net vendeur 
+                maximum pourrait monter jusqu'à <span className="font-semibold">{formatCurrency(results.maxNetSellerPrice)}</span> (coût total : {formatCurrency(results.maxTotalCost)}).
+                Mais aucun ajustement n'est nécessaire au prix actuel.
+              </p>
+            </div>
+          </div>
+        ) : (
+          /* Cas B: Rentabilité actuelle < rentabilité cible */
+          <div className="space-y-4">
+            <div>
+              <div className="stat-label mb-1">Prix net vendeur maximum pour atteindre votre objectif</div>
+              <div className="text-3xl font-bold text-accent">
+                {formatCurrency(results.maxNetSellerPrice)}
+              </div>
+            </div>
+
+            <div className="p-4 bg-card rounded-lg">
+              <p className="text-sm text-muted-foreground mb-3">
+                Pour atteindre une rentabilité brute de <span className="font-semibold text-foreground">{inputs.targetProfitability}%</span>, 
+                votre prix net vendeur ne doit pas dépasser : <span className="font-semibold text-accent">{formatCurrency(results.maxNetSellerPrice)}</span>.
+              </p>
+              
+              <div className="stat-label mb-2">Coût total max du projet</div>
+              <div className="text-xl font-semibold text-foreground">
+                {formatCurrency(results.maxTotalCost)}
+              </div>
+            </div>
+
+            <div className="p-3 bg-warning/10 rounded-lg border border-warning/20">
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  Prix net vendeur actuel : <span className="font-semibold text-foreground">{formatCurrency(inputs.netSellerPrice)}</span>
+                </p>
+                <p className="text-sm text-warning font-medium">
+                  ⚠️ Écart à négocier : {formatCurrency(inputs.netSellerPrice - results.maxNetSellerPrice)}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
