@@ -18,7 +18,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
   };
 
   const handleNumberChange = (field: keyof SimulationInputs, value: string) => {
-    const num = parseFloat(value) || 0;
+    const num = Math.max(0, parseFloat(value) || 0);
     updateField(field, num);
   };
 
@@ -50,6 +50,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
             <Input
               id="monthlyRent"
               type="number"
+              min="0"
               placeholder="Ex : 1 000"
               value={inputs.monthlyRent || ''}
               onChange={(e) => handleNumberChange('monthlyRent', e.target.value)}
@@ -74,6 +75,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
             <Input
               id="netSellerPrice"
               type="number"
+              min="0"
               placeholder="Ex : 200 000"
               value={inputs.netSellerPrice || ''}
               onChange={(e) => handleNumberChange('netSellerPrice', e.target.value)}
@@ -86,6 +88,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
             <Input
               id="agencyFees"
               type="number"
+              min="0"
               placeholder="Ex : 10 000"
               value={inputs.agencyFees || ''}
               onChange={(e) => handleNumberChange('agencyFees', e.target.value)}
@@ -98,6 +101,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
             <Input
               id="notaryFeesPercent"
               type="number"
+              min="0"
               step="0.1"
               placeholder="8"
               value={inputs.notaryFeesPercent || ''}
@@ -125,6 +129,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
           <Input
             id="renovationBudget"
             type="number"
+            min="0"
             placeholder="Ex : 20 000"
             value={inputs.renovationBudget || ''}
             onChange={(e) => handleNumberChange('renovationBudget', e.target.value)}
@@ -151,6 +156,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
             <Input
               id="maintenanceFees"
               type="number"
+              min="0"
               placeholder="Ex : 500"
               value={inputs.maintenanceFees || ''}
               onChange={(e) => handleNumberChange('maintenanceFees', e.target.value)}
@@ -163,6 +169,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
             <Input
               id="propertyTax"
               type="number"
+              min="0"
               placeholder="Ex : 1 200"
               value={inputs.propertyTax || ''}
               onChange={(e) => handleNumberChange('propertyTax', e.target.value)}
@@ -175,6 +182,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
             <Input
               id="cfe"
               type="number"
+              min="0"
               placeholder="Ex : 300"
               value={inputs.cfe || ''}
               onChange={(e) => handleNumberChange('cfe', e.target.value)}
@@ -187,6 +195,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
             <Input
               id="condoFees"
               type="number"
+              min="0"
               placeholder="Ex : 1 800"
               value={inputs.condoFees || ''}
               onChange={(e) => handleNumberChange('condoFees', e.target.value)}
@@ -232,6 +241,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
               <Input
                 id="interestRate"
                 type="number"
+                min="0"
                 step="0.1"
                 placeholder="3"
                 value={inputs.interestRate || ''}
@@ -245,6 +255,8 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
               <Input
                 id="financingPercent"
                 type="number"
+                min="0"
+                max="100"
                 step="5"
                 placeholder="100"
                 value={inputs.financingPercent || ''}

@@ -22,6 +22,11 @@ export interface SimulationResults {
   totalProjectCost: number;
   currentProfitability: number;
   
+  // Recurring fees
+  totalAnnualFees: number;
+  netAnnualIncome: number;
+  netProfitability: number;
+  
   // Credit
   loanAmount: number;
   monthlyPayment: number;
@@ -127,6 +132,15 @@ export function calculateSimulation(inputs: SimulationInputs): SimulationResults
     totalProjectCost
   );
   
+  // Calculate net profitability with recurring fees
+  const totalAnnualFees = (inputs.maintenanceFees || 0) + 
+                          (inputs.propertyTax || 0) + 
+                          (inputs.cfe || 0) + 
+                          (inputs.condoFees || 0);
+  const annualRent = inputs.monthlyRent * 12;
+  const netAnnualIncome = annualRent - totalAnnualFees;
+  const netProfitability = totalProjectCost > 0 ? (netAnnualIncome / totalProjectCost) * 100 : 0;
+  
   const loanAmount = totalProjectCost * (inputs.financingPercent / 100);
   
   const monthlyPayment = calculateMonthlyPayment(
@@ -166,6 +180,9 @@ export function calculateSimulation(inputs: SimulationInputs): SimulationResults
     notaryFees,
     totalProjectCost,
     currentProfitability,
+    totalAnnualFees,
+    netAnnualIncome,
+    netProfitability,
     loanAmount,
     monthlyPayment,
     totalInterestCost,
