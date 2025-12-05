@@ -2,7 +2,7 @@ import { SimulationInputs } from '@/lib/calculations';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Building2, CreditCard, Target, Home } from 'lucide-react';
+import { Building2, CreditCard, Target, Home, Wrench, Receipt } from 'lucide-react';
 
 interface SimulationFormProps {
   inputs: SimulationInputs;
@@ -59,13 +59,13 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
         </div>
       </div>
 
-      {/* Bloc B - Prix et frais */}
+      {/* Bloc B - Coût d'acquisition */}
       <div className="result-card animate-fade-in" style={{ animationDelay: '0.1s' }}>
         <div className="flex items-center gap-2 mb-6">
           <div className="p-2 rounded-lg bg-primary/10">
             <Building2 className="h-5 w-5 text-primary" />
           </div>
-          <h3 className="section-title !mb-0">Prix et frais d'acquisition</h3>
+          <h3 className="section-title !mb-0">Coût d'acquisition</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -94,18 +94,6 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
           </div>
 
           <div className="input-group">
-            <Label htmlFor="renovationBudget">Travaux (enveloppe prévue, €)</Label>
-            <Input
-              id="renovationBudget"
-              type="number"
-              placeholder="Ex : 20 000"
-              value={inputs.renovationBudget || ''}
-              onChange={(e) => handleNumberChange('renovationBudget', e.target.value)}
-              className="shadow-input"
-            />
-          </div>
-
-          <div className="input-group">
             <Label htmlFor="notaryFeesPercent">Frais de notaire (%)</Label>
             <Input
               id="notaryFeesPercent"
@@ -117,14 +105,99 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
               className="shadow-input"
             />
             <p className="text-xs text-muted-foreground mt-1">
-              Foncière : frais de notaire normaux (~8%)
+              Ancien : ~8% | Neuf : ~3%
             </p>
           </div>
         </div>
       </div>
 
-      {/* Bloc C - Financement */}
+      {/* Bloc C - Travaux */}
+      <div className="result-card animate-fade-in" style={{ animationDelay: '0.15s' }}>
+        <div className="flex items-center gap-2 mb-6">
+          <div className="p-2 rounded-lg bg-warning/10">
+            <Wrench className="h-5 w-5 text-warning" />
+          </div>
+          <h3 className="section-title !mb-0">Travaux</h3>
+        </div>
+
+        <div className="input-group">
+          <Label htmlFor="renovationBudget">Enveloppe travaux (€)</Label>
+          <Input
+            id="renovationBudget"
+            type="number"
+            placeholder="Ex : 20 000"
+            value={inputs.renovationBudget || ''}
+            onChange={(e) => handleNumberChange('renovationBudget', e.target.value)}
+            className="shadow-input"
+          />
+          <p className="text-xs text-muted-foreground mt-1">
+            Cosmétique, rénovation lourde, énergétique ou transformation
+          </p>
+        </div>
+      </div>
+
+      {/* Bloc D - Frais récurrents */}
       <div className="result-card animate-fade-in" style={{ animationDelay: '0.2s' }}>
+        <div className="flex items-center gap-2 mb-6">
+          <div className="p-2 rounded-lg bg-destructive/10">
+            <Receipt className="h-5 w-5 text-destructive" />
+          </div>
+          <h3 className="section-title !mb-0">Frais récurrents & charges</h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="input-group">
+            <Label htmlFor="maintenanceFees">Frais d'entretien / réparations (€/an)</Label>
+            <Input
+              id="maintenanceFees"
+              type="number"
+              placeholder="Ex : 500"
+              value={inputs.maintenanceFees || ''}
+              onChange={(e) => handleNumberChange('maintenanceFees', e.target.value)}
+              className="shadow-input"
+            />
+          </div>
+
+          <div className="input-group">
+            <Label htmlFor="propertyTax">Taxe foncière (€/an)</Label>
+            <Input
+              id="propertyTax"
+              type="number"
+              placeholder="Ex : 1 200"
+              value={inputs.propertyTax || ''}
+              onChange={(e) => handleNumberChange('propertyTax', e.target.value)}
+              className="shadow-input"
+            />
+          </div>
+
+          <div className="input-group">
+            <Label htmlFor="cfe">CFE (€/an)</Label>
+            <Input
+              id="cfe"
+              type="number"
+              placeholder="Ex : 300"
+              value={inputs.cfe || ''}
+              onChange={(e) => handleNumberChange('cfe', e.target.value)}
+              className="shadow-input"
+            />
+          </div>
+
+          <div className="input-group">
+            <Label htmlFor="condoFees">Frais de copropriété (€/an)</Label>
+            <Input
+              id="condoFees"
+              type="number"
+              placeholder="Ex : 1 800"
+              value={inputs.condoFees || ''}
+              onChange={(e) => handleNumberChange('condoFees', e.target.value)}
+              className="shadow-input"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Bloc E - Financement */}
+      <div className="result-card animate-fade-in" style={{ animationDelay: '0.25s' }}>
         <div className="flex items-center gap-2 mb-6">
           <div className="p-2 rounded-lg bg-primary/10">
             <CreditCard className="h-5 w-5 text-primary" />
@@ -183,7 +256,7 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
         </div>
       </div>
 
-      {/* Bloc D - Rentabilité cible */}
+      {/* Bloc F - Rentabilité cible */}
       <div className="result-card animate-fade-in" style={{ animationDelay: '0.3s' }}>
         <div className="flex items-center gap-2 mb-6">
           <div className="p-2 rounded-lg bg-accent/10">

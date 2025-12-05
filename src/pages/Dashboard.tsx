@@ -107,6 +107,11 @@ export default function Dashboard() {
     interestRate: Number(sim.interest_rate),
     financingPercent: Number(sim.financing_percent),
     targetProfitability: Number(sim.target_profitability),
+    // Frais récurrents (not yet in DB, default to 0)
+    maintenanceFees: 0,
+    propertyTax: 0,
+    cfe: 0,
+    condoFees: 0,
   });
 
   const handleExportPdf = (sim: DatabaseSimulation) => {

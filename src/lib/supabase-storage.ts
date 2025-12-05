@@ -30,6 +30,11 @@ export function simulationToInputs(sim: SupabaseSimulation): SimulationInputs {
     interestRate: sim.interest_rate,
     financingPercent: sim.financing_percent,
     targetProfitability: sim.target_profitability,
+    // Frais récurrents (not yet in DB, default to 0)
+    maintenanceFees: 0,
+    propertyTax: 0,
+    cfe: 0,
+    condoFees: 0,
   };
 }
 
