@@ -87,18 +87,19 @@ export function ActionBar({ inputs, results, onSave }: ActionBarProps) {
     }
   };
 
-  const handleExport = () => {
+  const handleExport = async () => {
     if (!user) {
       setPendingAction('export');
       setShowAuthModal(true);
       return;
     }
 
-    exportToPdf(inputs, results);
     toast({
       title: "Export PDF",
-      description: "La fenêtre d'impression va s'ouvrir.",
+      description: "Préparation du document...",
     });
+    
+    await exportToPdf(inputs, results);
   };
 
   return (
