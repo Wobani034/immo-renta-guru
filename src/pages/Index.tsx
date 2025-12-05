@@ -1,12 +1,15 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SimulationInputs, calculateSimulation } from '@/lib/calculations';
-import { getSavedSimulations, queryParamsToInputs, SavedSimulation } from '@/lib/storage';
+import { queryParamsToInputs } from '@/lib/storage';
+import { getUserSimulations, SupabaseSimulation } from '@/lib/supabase-storage';
 import { SimulationForm } from '@/components/SimulationForm';
 import { ResultsPanel } from '@/components/ResultsPanel';
 import { SavedSimulations } from '@/components/SavedSimulations';
 import { ActionBar } from '@/components/ActionBar';
-import { Building2, History } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Building2, History, User, LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const defaultInputs: SimulationInputs = {
   title: '',
@@ -23,8 +26,10 @@ const defaultInputs: SimulationInputs = {
 
 const Index = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState<SimulationInputs>(defaultInputs);
-  const [savedSimulations, setSavedSimulations] = useState<SavedSimulation[]>([]);
+  const [savedSimulations, setSavedSimulations] = useState<SupabaseSimulation[]>([]);
+  const { user, loading, signOut } = useAuth();
 
   // Load from URL params on mount
   useEffect(() => {
@@ -34,13 +39,21 @@ const Index = () => {
     }
   }, []);
 
-  // Load saved simulations
+  // Load saved simulations when user is authenticated
   useEffect(() => {
-    setSavedSimulations(getSavedSimulations());
-  }, []);
+    if (user) {
+      loadUserSimulations();
+    } else {
+      setSavedSimulations([]);
+    }
+  }, [user]);
 
-  const refreshSaved = () => {
-    setSavedSimulations(getSavedSimulations());
+  const loadUserSimulations = async () => {
+    if (!user) return;
+    const { data } = await getUserSimulations(user.id);
+    if (data) {
+      setSavedSimulations(data);
+    }
   };
 
   const results = useMemo(() => calculateSimulation(inputs), [inputs]);
@@ -48,6 +61,10 @@ const Index = () => {
   const loadSimulation = (loadedInputs: SimulationInputs) => {
     setInputs(loadedInputs);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
   };
 
   return (
@@ -69,8 +86,43 @@ const Index = () => {
                 </p>
               </div>
             </div>
-            <div className="hidden md:block">
-              <ActionBar inputs={inputs} results={results} onSave={refreshSaved} />
+            <div className="flex items-center gap-4">
+              <div className="hidden md:block">
+                <ActionBar inputs={inputs} results={results} onSave={loadUserSimulations} />
+              </div>
+              {!loading && (
+                user ? (
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => navigate('/dashboard')}
+                      className="flex items-center gap-2"
+                    >
+                      <User className="h-4 w-4" />
+                      <span className="hidden sm:inline">Dashboard</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleSignOut}
+                      title="Se déconnecter"
+                    >
+                      <LogOut className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/auth')}
+                    className="flex items-center gap-2"
+                  >
+                    <User className="h-4 w-4" />
+                    <span className="hidden sm:inline">Connexion</span>
+                  </Button>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -92,7 +144,7 @@ const Index = () => {
                 <SavedSimulations 
                   simulations={savedSimulations}
                   onLoad={loadSimulation}
-                  onRefresh={refreshSaved}
+                  onRefresh={loadUserSimulations}
                 />
               </div>
             </div>
@@ -117,7 +169,7 @@ const Index = () => {
 
         {/* Mobile action bar */}
         <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-card/95 backdrop-blur-md border-t border-border">
-          <ActionBar inputs={inputs} results={results} onSave={refreshSaved} />
+          <ActionBar inputs={inputs} results={results} onSave={loadUserSimulations} />
         </div>
 
         {/* Mobile saved simulations */}
@@ -132,7 +184,7 @@ const Index = () => {
             <SavedSimulations 
               simulations={savedSimulations}
               onLoad={loadSimulation}
-              onRefresh={refreshSaved}
+              onRefresh={loadUserSimulations}
             />
           </div>
         </div>
