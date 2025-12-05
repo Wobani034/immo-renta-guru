@@ -1,5 +1,5 @@
 import { SimulationInputs, SimulationResults, formatCurrency } from '@/lib/calculations';
-import { TrendingUp, Calculator, Wallet, Target, ArrowDown, ArrowUp } from 'lucide-react';
+import { TrendingUp, Calculator, Wallet, Target, ArrowDown, ArrowUp, Receipt } from 'lucide-react';
 
 interface ResultsPanelProps {
   inputs: SimulationInputs;
@@ -9,6 +9,7 @@ interface ResultsPanelProps {
 export function ResultsPanel({ inputs, results }: ResultsPanelProps) {
   const isProfitable = results.currentProfitability >= inputs.targetProfitability;
   const profitabilityDiff = results.currentProfitability - inputs.targetProfitability;
+  const isNetProfitable = results.netProfitability >= inputs.targetProfitability;
 
   return (
     <div className="space-y-6">
@@ -85,6 +86,42 @@ export function ResultsPanel({ inputs, results }: ResultsPanelProps) {
           Loyer annuel : {formatCurrency(inputs.monthlyRent * 12)}
         </div>
       </div>
+
+      {/* Rentabilité nette (si frais récurrents) */}
+      {results.totalAnnualFees > 0 && (
+        <div 
+          className={`result-card animate-slide-up ${
+            isNetProfitable ? 'ring-2 ring-success/30' : 'ring-2 ring-destructive/30'
+          }`}
+          style={{ animationDelay: '0.15s' }}
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <div className={`p-2 rounded-lg ${isNetProfitable ? 'bg-success/10' : 'bg-destructive/10'}`}>
+              <Receipt className={`h-5 w-5 ${isNetProfitable ? 'text-success' : 'text-destructive'}`} />
+            </div>
+            <h3 className="section-title !mb-0">Rentabilité nette (après charges)</h3>
+          </div>
+
+          <div className={`text-4xl font-bold ${isNetProfitable ? 'text-success' : 'text-destructive'}`}>
+            {results.netProfitability.toFixed(2)}%
+          </div>
+
+          <div className="mt-4 space-y-2 text-sm">
+            <div className="flex justify-between py-2 border-b border-border/50">
+              <span className="text-muted-foreground">Loyer annuel brut</span>
+              <span className="font-medium">{formatCurrency(inputs.monthlyRent * 12)}</span>
+            </div>
+            <div className="flex justify-between py-2 border-b border-border/50">
+              <span className="text-muted-foreground">Charges annuelles totales</span>
+              <span className="font-medium text-destructive">- {formatCurrency(results.totalAnnualFees)}</span>
+            </div>
+            <div className="flex justify-between py-2">
+              <span className="text-muted-foreground font-semibold">Revenu net annuel</span>
+              <span className="font-bold text-foreground">{formatCurrency(results.netAnnualIncome)}</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Crédit */}
       <div className="result-card animate-slide-up" style={{ animationDelay: '0.2s' }}>
