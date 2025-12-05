@@ -8,8 +8,9 @@ import { ResultsPanel } from '@/components/ResultsPanel';
 import { SavedSimulations } from '@/components/SavedSimulations';
 import { ActionBar } from '@/components/ActionBar';
 import { useAuth } from '@/hooks/useAuth';
-import { Building2, History, User, LogOut } from 'lucide-react';
+import { History, User, LogOut, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import alpacaLogo from '@/assets/alpaca-logo.png';
 
 const defaultInputs: SimulationInputs = {
   title: '',
@@ -74,18 +75,20 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-primary to-accent">
-                <Building2 className="h-6 w-6 text-primary-foreground" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold font-display text-foreground">
-                  Calculateur de Rentabilité
-                </h1>
-                <p className="text-xs text-muted-foreground">
-                  Simulateur pour investisseur professionnel
-                </p>
-              </div>
+              <img src={alpacaLogo} alt="Alpaca Immobilier" className="h-12 w-auto" />
             </div>
+            <nav className="hidden md:flex items-center gap-6">
+              <a href="https://alpaca.immo/services" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Nos services
+              </a>
+              <a href="https://alpaca.immo/contact" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Contact
+              </a>
+              <a href="tel:0970703107" className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors">
+                <Phone className="h-4 w-4" />
+                09 70 70 31 07
+              </a>
+            </nav>
             <div className="flex items-center gap-4">
               <div className="hidden md:block">
                 <ActionBar inputs={inputs} results={results} onSave={loadUserSimulations} />
