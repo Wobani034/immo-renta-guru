@@ -9,6 +9,11 @@ export interface SimulationInputs {
   interestRate: number;
   financingPercent: number;
   targetProfitability: number;
+  // Frais récurrents
+  maintenanceFees: number;
+  propertyTax: number;
+  cfe: number;
+  condoFees: number;
 }
 
 export interface SimulationResults {

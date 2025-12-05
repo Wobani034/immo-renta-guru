@@ -23,6 +23,10 @@ const defaultInputs: SimulationInputs = {
   interestRate: 3,
   financingPercent: 100,
   targetProfitability: 10,
+  maintenanceFees: 0,
+  propertyTax: 0,
+  cfe: 0,
+  condoFees: 0,
 };
 
 const Index = () => {
