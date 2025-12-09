@@ -10,7 +10,7 @@ import { ActionBar } from '@/components/ActionBar';
 import { useAuth } from '@/hooks/useAuth';
 import { History, User, LogOut, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import alpacaLogo from '@/assets/alpaca-logo.png';
+import alpacaLogo from '@/assets/alpaca-logo.svg';
 
 const defaultInputs: SimulationInputs = {
   title: '',
@@ -21,7 +21,7 @@ const defaultInputs: SimulationInputs = {
   notaryFeesPercent: 8,
   creditDuration: 15,
   interestRate: 3,
-  financingPercent: 100,
+  downPayment: 0,
   targetProfitability: 10,
   maintenanceFees: 0,
   propertyTax: 0,
