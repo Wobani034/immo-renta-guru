@@ -132,6 +132,17 @@ export function ResultsPanel({ inputs, results }: ResultsPanelProps) {
           <h3 className="section-title !mb-0">Crédit immobilier</h3>
         </div>
 
+        {inputs.downPayment > 0 && (
+          <div className="mb-4 p-3 bg-success/10 rounded-lg border border-success/20">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Apport personnel</span>
+              <span className="font-semibold text-success">
+                {formatCurrency(inputs.downPayment)}
+              </span>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="stat-label">Montant emprunté</div>

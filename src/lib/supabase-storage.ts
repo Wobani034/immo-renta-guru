@@ -28,7 +28,7 @@ export function simulationToInputs(sim: SupabaseSimulation): SimulationInputs {
     notaryFeesPercent: sim.notary_fees_percent,
     creditDuration: sim.credit_duration,
     interestRate: sim.interest_rate,
-    financingPercent: sim.financing_percent,
+    downPayment: 0, // DB has financing_percent, we default to 0 apport for now
     targetProfitability: sim.target_profitability,
     // Frais récurrents (not yet in DB, default to 0)
     maintenanceFees: 0,
@@ -62,7 +62,7 @@ export async function saveSimulationToSupabase(
         notary_fees_percent: inputs.notaryFeesPercent,
         credit_duration: inputs.creditDuration,
         interest_rate: inputs.interestRate,
-        financing_percent: inputs.financingPercent,
+        financing_percent: 100, // Legacy field - we now use downPayment
         target_profitability: inputs.targetProfitability,
       })
       .eq('id', existing.id)
@@ -84,7 +84,7 @@ export async function saveSimulationToSupabase(
         notary_fees_percent: inputs.notaryFeesPercent,
         credit_duration: inputs.creditDuration,
         interest_rate: inputs.interestRate,
-        financing_percent: inputs.financingPercent,
+        financing_percent: 100, // Legacy field - we now use downPayment
         target_profitability: inputs.targetProfitability,
       })
       .select()

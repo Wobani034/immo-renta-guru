@@ -258,8 +258,8 @@ export function generatePdfContent(
         <span class="item-value">${inputs.interestRate}%</span>
       </div>
       <div class="item">
-        <span class="item-label">Part financée</span>
-        <span class="item-value">${inputs.financingPercent}%</span>
+        <span class="item-label">Apport personnel</span>
+        <span class="item-value">${formatCurrency(inputs.downPayment)}</span>
       </div>
       <div class="item">
         <span class="item-label">Montant emprunté</span>

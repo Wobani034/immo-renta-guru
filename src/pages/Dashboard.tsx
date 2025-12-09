@@ -105,7 +105,7 @@ export default function Dashboard() {
     notaryFeesPercent: Number(sim.notary_fees_percent),
     creditDuration: Number(sim.credit_duration),
     interestRate: Number(sim.interest_rate),
-    financingPercent: Number(sim.financing_percent),
+    downPayment: 0, // DB has financing_percent, we default to 0 apport
     targetProfitability: Number(sim.target_profitability),
     // Frais récurrents (not yet in DB, default to 0)
     maintenanceFees: 0,
@@ -135,7 +135,7 @@ export default function Dashboard() {
       tauxNotaire: inputs.notaryFeesPercent.toString(),
       duree: inputs.creditDuration.toString(),
       tauxCredit: inputs.interestRate.toString(),
-      financement: inputs.financingPercent.toString(),
+      apport: inputs.downPayment.toString(),
       rentaCible: inputs.targetProfitability.toString(),
     });
     navigate(`/?${params.toString()}`);

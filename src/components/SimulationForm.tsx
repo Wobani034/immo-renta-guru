@@ -251,18 +251,19 @@ export function SimulationForm({ inputs, onChange }: SimulationFormProps) {
             </div>
 
             <div className="input-group">
-              <Label htmlFor="financingPercent">Part financée par la banque (%)</Label>
+              <Label htmlFor="downPayment">Apport personnel (€)</Label>
               <Input
-                id="financingPercent"
+                id="downPayment"
                 type="number"
                 min="0"
-                max="100"
-                step="5"
-                placeholder="100"
-                value={inputs.financingPercent || ''}
-                onChange={(e) => handleNumberChange('financingPercent', e.target.value)}
+                placeholder="Ex : 20 000"
+                value={inputs.downPayment || ''}
+                onChange={(e) => handleNumberChange('downPayment', e.target.value)}
                 className="shadow-input"
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                Montant de votre apport en numéraire
+              </p>
             </div>
           </div>
         </div>

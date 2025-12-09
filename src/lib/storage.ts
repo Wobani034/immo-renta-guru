@@ -73,7 +73,7 @@ export function inputsToQueryParams(inputs: SimulationInputs): string {
     tauxNotaire: inputs.notaryFeesPercent.toString(),
     duree: inputs.creditDuration.toString(),
     tauxCredit: inputs.interestRate.toString(),
-    financement: inputs.financingPercent.toString(),
+    apport: inputs.downPayment.toString(),
     rentaCible: inputs.targetProfitability.toString(),
   });
   
@@ -107,8 +107,8 @@ export function queryParamsToInputs(searchParams: URLSearchParams): Partial<Simu
   const tauxCredit = searchParams.get('tauxCredit');
   if (tauxCredit) result.interestRate = parseFloat(tauxCredit);
   
-  const financement = searchParams.get('financement');
-  if (financement) result.financingPercent = parseFloat(financement);
+  const apport = searchParams.get('apport');
+  if (apport) result.downPayment = parseFloat(apport);
   
   const rentaCible = searchParams.get('rentaCible');
   if (rentaCible) result.targetProfitability = parseFloat(rentaCible);

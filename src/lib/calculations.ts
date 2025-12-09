@@ -7,7 +7,7 @@ export interface SimulationInputs {
   notaryFeesPercent: number;
   creditDuration: number;
   interestRate: number;
-  financingPercent: number;
+  downPayment: number; // Apport en €
   targetProfitability: number;
   // Frais récurrents
   maintenanceFees: number;
@@ -141,7 +141,7 @@ export function calculateSimulation(inputs: SimulationInputs): SimulationResults
   const netAnnualIncome = annualRent - totalAnnualFees;
   const netProfitability = totalProjectCost > 0 ? (netAnnualIncome / totalProjectCost) * 100 : 0;
   
-  const loanAmount = totalProjectCost * (inputs.financingPercent / 100);
+  const loanAmount = Math.max(0, totalProjectCost - (inputs.downPayment || 0));
   
   const monthlyPayment = calculateMonthlyPayment(
     loanAmount,
