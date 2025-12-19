@@ -1,15 +1,19 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SimulationInputs, calculateSimulation } from '@/lib/calculations';
+import { SCIInputs, defaultSCIInputs, calculateSCIResults } from '@/lib/sci-calculations';
 import { queryParamsToInputs } from '@/lib/storage';
 import { getUserSimulations, SupabaseSimulation } from '@/lib/supabase-storage';
 import { SimulationForm } from '@/components/SimulationForm';
 import { ResultsPanel } from '@/components/ResultsPanel';
+import { SCIForm } from '@/components/SCIForm';
+import { SCIResultsPanel } from '@/components/SCIResultsPanel';
 import { SavedSimulations } from '@/components/SavedSimulations';
 import { ActionBar } from '@/components/ActionBar';
 import { useAuth } from '@/hooks/useAuth';
-import { History, User, LogOut, Phone } from 'lucide-react';
+import { History, User, LogOut, Phone, Building2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import alpacaLogo from '@/assets/alpaca-logo.svg';
 
 const defaultInputs: SimulationInputs = {
@@ -33,7 +37,9 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [inputs, setInputs] = useState<SimulationInputs>(defaultInputs);
+  const [sciInputs, setSciInputs] = useState<SCIInputs>(defaultSCIInputs);
   const [savedSimulations, setSavedSimulations] = useState<SupabaseSimulation[]>([]);
+  const [sciOpen, setSciOpen] = useState(false);
   const { user, loading, signOut } = useAuth();
 
   // Load from URL params on mount
@@ -62,6 +68,7 @@ const Index = () => {
   };
 
   const results = useMemo(() => calculateSimulation(inputs), [inputs]);
+  const sciResults = useMemo(() => calculateSCIResults(inputs, results, sciInputs), [inputs, results, sciInputs]);
 
   const loadSimulation = (loadedInputs: SimulationInputs) => {
     setInputs(loadedInputs);
@@ -172,6 +179,45 @@ const Index = () => {
             </h2>
             <ResultsPanel inputs={inputs} results={results} />
           </div>
+        </div>
+
+        {/* SCI Module */}
+        <div className="mt-8">
+          <Collapsible open={sciOpen} onOpenChange={setSciOpen}>
+            <CollapsibleTrigger asChild>
+              <button className="w-full flex items-center justify-between p-4 bg-card rounded-lg border border-border hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <Building2 className="h-5 w-5 text-primary" />
+                  <div className="text-left">
+                    <h3 className="font-semibold text-foreground">Simulation SCI</h3>
+                    <p className="text-sm text-muted-foreground">Comparer SCI à l'IR vs SCI à l'IS</p>
+                  </div>
+                </div>
+                {sciOpen ? (
+                  <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                )}
+              </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-4">
+                  <div className="result-card">
+                    <h4 className="font-semibold text-foreground mb-4">Paramètres SCI</h4>
+                    <SCIForm inputs={sciInputs} onChange={setSciInputs} />
+                  </div>
+                </div>
+                <div className="lg:col-span-8">
+                  <SCIResultsPanel 
+                    sciInputs={sciInputs} 
+                    results={sciResults} 
+                    creditDuration={inputs.creditDuration}
+                  />
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
 
         {/* Mobile action bar */}
